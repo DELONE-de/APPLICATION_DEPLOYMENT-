@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket  = ""  # add your bucket name here
-    key     = "dev/terraform.tfstate"
+    bucket  = "my2007-terraform-state-bucket" 
+    key     = "application/terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
   }
