@@ -46,6 +46,46 @@ DynamoDB (Serverless Database)
 
 ---
 
+## 🎯 Design Decisions
+
+- **Serverless compute with ECS Fargate**: avoids EC2 management and aligns with pay-per-use costs for container workloads.
+- **CloudFront in front of ALB**: improves global performance, enables HTTPS enforcement, and reduces origin load.
+- **Application Load Balancer**: supports dynamic routing and health checks for container tasks.
+- **DynamoDB On-Demand**: chosen for automatic scaling, low operational overhead, and unpredictable traffic patterns.
+- **Private ECS tasks**: isolates the application from direct internet access while allowing inbound traffic only through the ALB.
+- **Terraform modularization**: separates networking, security, compute, monitoring, and database resources for reuse and maintainability.
+- **CloudWatch monitoring and alarms**: built in to detect CPU/memory issues, support scaling, and enable fast incident response.
+- **Least-privilege IAM roles**: task execution and app roles are scoped to only required AWS resources.
+
+## ⚙️ Assumptions
+
+- An AWS account with permissions to manage ECS, ECR, CloudFront, ALB, DynamoDB, IAM, CloudWatch, SNS, and networking resources is available.
+- Terraform state is managed externally or via a supported backend such as S3 with locking.
+- The repository is deployed into distinct `dev` and `prod` environments, with environment-specific variables configured under `terraform/environments/`.
+- Container images will be built and pushed to ECR before ECS deployment.
+- TLS certificates and DNS configuration for CloudFront are provisioned or managed outside this repository if required.
+- The application is designed to run on port 3000 inside the container and expose traffic through the ALB.
+
+## 🚧 Limitations & Improvements
+
+### Current limitations
+- No built-in multi-region or disaster recovery deployment strategy.
+- No automated blue/green or canary deployment process is included.
+
+- No explicit WAF or advanced edge security policy is configured for CloudFront.
+
+
+### Suggested improvements
+- Add a CI/CD pipeline for fully automated build, test, and deploy flows.
+- Implement blue/green or canary deployments for safer releases.
+- Add AWS WAF rules and bot mitigation at the CloudFront layer.
+- Add a secure secrets management integration with AWS Secrets Manager or Parameter Store.
+- Enable multi-region deployment or backup recovery options for improved resilience.
+- Add more detailed cost reporting and usage dashboards.
+- Extend the architecture documentation with a dependency diagram for internal services and data flows.
+
+---
+
 ## 🔧 AWS Services
 
 ### Core Services
