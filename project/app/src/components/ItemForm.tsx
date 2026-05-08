@@ -24,21 +24,22 @@ export default function ItemForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "2rem", display: "flex", flexDirection: "column", gap: "0.5rem", maxWidth: 400 }}>
+    <form onSubmit={handleSubmit} className="form">
+      <p className="form-title">Add Item</p>
       <input
         required
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        style={{ padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }}
+        className="input"
       />
       <textarea
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        style={{ padding: "0.5rem", borderRadius: 4, border: "1px solid #ccc" }}
+        className="textarea"
       />
-      <button type="submit" disabled={loading} style={{ padding: "0.5rem 1rem", borderRadius: 4, cursor: "pointer" }}>
+      <button type="submit" disabled={loading} className="btn">
         {loading ? "Adding..." : "Add Item"}
       </button>
     </form>

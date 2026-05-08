@@ -1,4 +1,5 @@
-node_modules
-.next
+.next/
+.git/
 .env.local
-.git
+.env.*.local
+README.md

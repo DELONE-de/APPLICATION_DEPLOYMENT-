@@ -1,20 +1,23 @@
 import { Item } from "@/types/item";
+import { db, TABLE_NAME } from "@/lib/dynamodb";
+import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import ItemList from "@/components/ItemList";
 import ItemForm from "@/components/ItemForm";
 
 async function getItems(): Promise<Item[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/items`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return [];
-  return res.json();
+  try {
+    const result = await db.send(new ScanCommand({ TableName: TABLE_NAME }));
+    return (result.Items ?? []) as Item[];
+  } catch {
+    return [];
+  }
 }
 
 export default async function Home() {
   const items = await getItems();
   return (
     <main>
-      <h1>Items</h1>
+      <h1 className="page-title">Items</h1>
       <ItemForm />
       <ItemList items={items} />
     </main>
