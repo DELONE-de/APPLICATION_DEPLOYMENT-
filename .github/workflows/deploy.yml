@@ -108,6 +108,22 @@ jobs:
             --service ${{ env.ENVIRONMENT }}-app \
             --force-new-deployment
 
+      - name: Wait for ECS service to be stable
+        run: |
+          aws ecs wait services-stable \
+            --cluster ${{ env.ENVIRONMENT }}-cluster \
+            --services ${{ env.ENVIRONMENT }}-app
+
+      - name: Check ECS service status
+        if: failure()
+        run: |
+          echo "ECS Service Status:"
+          aws ecs describe-services \
+            --cluster ${{ env.ENVIRONMENT }}-cluster \
+            --services ${{ env.ENVIRONMENT }}-app \
+            --query 'services[0].{status:status,events:events[:5]}' \
+            --output table
+
       - name: Wait for ECS service to stabilize
         run: |
           aws ecs wait services-stable \
