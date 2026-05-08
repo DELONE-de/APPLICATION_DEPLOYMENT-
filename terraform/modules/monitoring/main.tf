@@ -109,37 +109,45 @@ resource "aws_cloudwatch_dashboard" "app" {
       {
         type = "metric"
         properties = {
-          title   = "ECS CPU Utilization"
-          metrics = [["AWS/ECS", "CPUUtilization", "ClusterName", var.ecs_cluster_name, "ServiceName", var.ecs_service_name]]
-          period  = 60
-          stat    = "Average"
+          title       = "ECS CPU Utilization"
+          region      = var.aws_region
+          annotations = {}
+          metrics     = [["AWS/ECS", "CPUUtilization", "ClusterName", var.ecs_cluster_name, "ServiceName", var.ecs_service_name]]
+          period      = 60
+          stat        = "Average"
         }
       },
       {
         type = "metric"
         properties = {
-          title   = "ECS Memory Utilization"
-          metrics = [["AWS/ECS", "MemoryUtilization", "ClusterName", var.ecs_cluster_name, "ServiceName", var.ecs_service_name]]
-          period  = 60
-          stat    = "Average"
+          title       = "ECS Memory Utilization"
+          region      = var.aws_region
+          annotations = {}
+          metrics     = [["AWS/ECS", "MemoryUtilization", "ClusterName", var.ecs_cluster_name, "ServiceName", var.ecs_service_name]]
+          period      = 60
+          stat        = "Average"
         }
       },
       {
         type = "metric"
         properties = {
-          title   = "ALB 5XX Errors"
-          metrics = [["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", var.alb_arn_suffix]]
-          period  = 60
-          stat    = "Sum"
+          title       = "ALB 5XX Errors"
+          region      = var.aws_region
+          annotations = {}
+          metrics     = [["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", var.alb_arn_suffix]]
+          period      = 60
+          stat        = "Sum"
         }
       },
       {
         type = "metric"
         properties = {
-          title   = "ALB Response Time"
-          metrics = [["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_arn_suffix]]
-          period  = 60
-          stat    = "Average"
+          title       = "ALB Response Time"
+          region      = var.aws_region
+          annotations = {}
+          metrics     = [["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", var.alb_arn_suffix]]
+          period      = 60
+          stat        = "Average"
         }
       },
       {
@@ -147,7 +155,7 @@ resource "aws_cloudwatch_dashboard" "app" {
         properties = {
           title  = "Application Logs"
           query  = "SOURCE '${aws_cloudwatch_log_group.app.name}' | fields @timestamp, @message | sort @timestamp desc | limit 50"
-          region = "us-east-1"
+          region = var.aws_region
           view   = "table"
         }
       }

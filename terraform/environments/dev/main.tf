@@ -49,6 +49,7 @@ module "cloudfront" {
 module "monitoring" {
   source           = "../../modules/monitoring"
   environment      = var.environment
+  aws_region       = var.aws_region
   ecs_cluster_name = module.ecs.cluster_name
   ecs_service_name = module.ecs.service_name
   alb_arn_suffix   = module.alb.alb_arn_suffix
