@@ -1,6 +1,6 @@
 variable "environment" {
   type    = string
-  default = "prod"
+  default = "dev"
 }
 
 variable "aws_region" {
@@ -13,11 +13,9 @@ variable "table_name" {
   default = "items"
 }
 
-variable "certificate_arn" {
-  description = "ACM certificate ARN for HTTPS"
-  type        = string
-}
+
 
 variable "alarm_email" {
   type = string
+  default = "convenati@gmail.com"
 }

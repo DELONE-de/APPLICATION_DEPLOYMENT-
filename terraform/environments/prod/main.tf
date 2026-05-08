@@ -1,7 +1,10 @@
+
 module "networking" {
   source      = "../../modules/networking"
   environment = var.environment
   aws_region  = var.aws_region
+  vpc_id = module.networking.vpc_id
+  private_route_table_id = module.networking.private_route_table_id
 }
 
 module "security_groups" {
@@ -35,7 +38,12 @@ module "alb" {
   vpc_id            = module.networking.vpc_id
   public_subnet_ids = module.networking.public_subnet_ids
   alb_sg_id         = module.security_groups.alb_sg_id
-  certificate_arn   = var.certificate_arn
+}
+
+module "cloudfront" {
+  source       = "../../modules/cloudfront"
+  environment  = var.environment
+  alb_dns_name = module.alb.alb_dns_name
 }
 
 module "monitoring" {
@@ -45,6 +53,13 @@ module "monitoring" {
   ecs_service_name = module.ecs.service_name
   alb_arn_suffix   = module.alb.alb_arn_suffix
   alarm_email      = var.alarm_email
+}
+
+module "ecs_autoscaling" {
+  source       = "../../modules/ecs_autoscaling"
+  environment  = var.environment
+  cluster_name = module.ecs.cluster_name
+  service_name = module.ecs.service_name
 }
 
 module "ecs" {
@@ -59,7 +74,5 @@ module "ecs" {
   task_execution_role_arn = module.iam.task_execution_role_arn
   task_role_arn           = module.iam.task_role_arn
   log_group_name          = module.monitoring.log_group_name
-  desired_count           = 2
-  cpu                     = 512
-  memory                  = 1024
+  desired_count           = 1
 }
