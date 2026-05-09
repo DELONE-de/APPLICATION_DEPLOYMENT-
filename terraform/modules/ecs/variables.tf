@@ -49,12 +49,12 @@ variable "container_port" {
 
 variable "cpu" {
   type    = number
-  default = 256
+  default = 512
 }
 
 variable "memory" {
   type    = number
-  default = 512
+  default = 1024
 }
 
 variable "desired_count" {
